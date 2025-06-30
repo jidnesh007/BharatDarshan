@@ -10,6 +10,7 @@ import {
   Menu,
 } from "lucide-react";
 import HeritageCarousel from "../components/HeritageCarousel";
+import ExiquisiteCrafts from "../components/ExiquisitieCrafts";
 
 const videos = [
   { name: "India 360", src: "/videos/India-360-v2.mp4" },
@@ -238,6 +239,7 @@ export default function HeroSection() {
 
     <div className="w-screen h-full">
       <HeritageCarousel />
+     <ExiquisiteCrafts />
       
     </div>
     </>
