@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ChevronRight,
@@ -14,13 +14,31 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 
-const Navbar = ({ navDark = false }) => {
+const Navbar = () => {
+  const [navDark, setNavDark] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      // Change navbar style when scrolled more than 50px
+      setNavDark(scrollTop > 50);
+    };
+
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup function to remove event listener
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         navDark
-          ? "bg-black/90 backdrop-blur-sm text-black shadow-lg"
-          : "bg-transparent text-white"
+          ? "bg-black/90 backdrop-blur-sm shadow-lg"
+          : "bg-transparent"
       }`}
     >
       <div className="flex items-center justify-between px-6 lg:px-12 py-4">
