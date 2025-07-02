@@ -13,15 +13,15 @@ const supabase = createClient(
 );
 
 function App() {
-  const [instruments, setInstruments] = useState([]);
+  // const [instruments, setInstruments] = useState([]);
 
-  useEffect(() => {
-    getInstruments();
-  }, []);
-  async function getInstruments() {
-    const { data } = await supabase.from("instruments").select();
-    setInstruments(data);
-  }
+  // useEffect(() => {
+  //   getInstruments();
+  // }, []);
+  // async function getInstruments() {
+  //   const { data } = await supabase.from("instruments").select();
+  //   setInstruments(data);
+  // }
 
   return (
     <Routes>
