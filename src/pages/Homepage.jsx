@@ -19,6 +19,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const videos = [
   { name: "India 360", src: "/videos/India-360-v2.mp4" },
@@ -137,75 +138,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-black/20 z-0"></div>
 
         {/* Navbar */}
-        <div
-          className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-            navDark
-              ? "bg-black/90 backdrop-blur-sm text-black shadow-lg"
-              : "bg-transparent text-white"
-          }`}
-        >
-          <div className="flex items-center justify-between px-6 lg:px-12 py-4">
-            {/* Logo */}
-            <div className="flex items-center">
-              <h1
-                className={`text-2xl lg:text-3xl font-light tracking-wide transition-colors duration-300 ${
-                  navDark ? "text-white" : "text-white"
-                }`}
-              >
-                Bharat
-                <span className="text-2xl text-red-500 lg:text-3xl font-light tracking-wide">
-                  Darshan
-                </span>
-              </h1>
-            </div>
-
-            {/* Center Navigation */}
-            <div
-              className={`hidden lg:flex items-center space-x-8 text-base font-light transition-colors duration-300 ${
-                navDark ? "text-white" : "text-white"
-              }`}
-            >
-              <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-                <span>Destinations</span>
-                <ChevronRight className="w-4 h-4 rotate-90" />
-              </div>
-              <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-                <span>Experiences</span>
-                <ChevronRight className="w-4 h-4 rotate-90" />
-              </div>
-              <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-                <span>Plan your trip</span>
-                <ChevronRight className="w-4 h-4 rotate-90" />
-              </div>
-            </div>
-
-            {/* Right side icons */}
-            <div
-              className={`flex items-center space-x-4 transition-colors duration-300 ${
-                navDark ? "text-white" : "text-white"
-              }`}
-            >
-              <Search className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-              <User className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-              <Heart className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-              {/* <Menu className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors lg:hidden" /> */}
-              <SignedOut>
-                <SignInButton />
-              </SignedOut>
-              <SignedIn>
-                <Link href="#">
-                  <button>
-                    <LayoutDashboard />
-                    <span>Dashboard</span>
-                  </button>
-                </Link>
-              </SignedIn>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </div>
-          </div>
-        </div>
+        <Navbar />
 
         {/* Bottom Controls */}
         <div className="absolute bottom-8 left-0 right-0 z-10">
