@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Volume2,
-  VolumeX,
- 
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Volume2, VolumeX } from "lucide-react";
 import HeritageCarousel from "../components/HeritageCarousel";
 import ExiquisiteCrafts from "../components/ExiquisitieCrafts";
 import Carbon from "../components/Carbon";
-
 
 import Navbar from "../components/Navbar";
 import Multi from "../components/Multi";
@@ -199,7 +192,7 @@ export default function HeroSection() {
         <ExiquisiteCrafts />
         <Multi />
         <Time />
-        <Scam/>
+        <Scam />
         <Carbon />
       </div>
     </>

@@ -36,9 +36,7 @@ const Navbar = () => {
   return (
     <div
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        navDark
-          ? "bg-black/90 backdrop-blur-sm shadow-lg"
-          : "bg-transparent"
+        navDark ? "bg-black/90 backdrop-blur-sm shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="flex items-center justify-between px-6 lg:px-12 py-4">
@@ -61,9 +59,7 @@ const Navbar = () => {
           className={`hidden lg:flex items-center space-x-8 text-base font-light transition-colors duration-300 ${
             navDark ? "text-white" : "text-white"
           }`}
-        >
-          
-        </div>
+        ></div>
 
         {/* Right side icons */}
         <div
@@ -71,8 +67,6 @@ const Navbar = () => {
             navDark ? "text-white" : "text-white"
           }`}
         >
-      
-
           <SignedOut>
             <SignInButton />
           </SignedOut>
