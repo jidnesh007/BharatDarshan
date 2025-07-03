@@ -14,7 +14,7 @@ import {
   Award,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
-import MultiLanguage from "../components/MultilingualAudioApp"; 
+import MultiLanguage from "../components/MultilingualAudioApp";
 // Import the MultiLanguage component
 
 const Dashboard = () => {
@@ -191,7 +191,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40">
+      {/* <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-4">
             <button
@@ -220,8 +220,12 @@ const Dashboard = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full"></div>
           </div>
         </div>
+      </header> */}
+      <header className="bg-white/80 backdrop-blur-lg  sticky top-0 z-40 ">
+        <div className="flex items-center justify-between px-6 py-4 bg-neutral-600 h-16">
+          <Navbar />
+        </div>
       </header>
-
       <div className="flex">
         {/* Sidebar */}
         <aside
