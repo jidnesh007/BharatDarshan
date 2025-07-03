@@ -1,25 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Volume2,
-  VolumeX,
-  Search,
-  User,
-  Heart,
-  Menu,
-  LayoutDashboard,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Volume2, VolumeX } from "lucide-react";
 import HeritageCarousel from "../components/HeritageCarousel";
 import ExiquisiteCrafts from "../components/ExiquisitieCrafts";
 import Carbon from "../components/Carbon";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
+
 import Navbar from "../components/Navbar";
 import Multi from "../components/Multi";
 import Time from "../components/Time";
@@ -75,7 +59,7 @@ export default function HeroSection() {
 
   return (
     <>
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative h-screen w-screen overflow-hidden">
         <style>
           {`
                     .video-slide {
@@ -203,7 +187,7 @@ export default function HeroSection() {
         `}</style>
       </div>
 
-      <div className="w-full h-full">
+      <div className="w-screen h-full">
         <HeritageCarousel />
         <ExiquisiteCrafts />
         <Multi />

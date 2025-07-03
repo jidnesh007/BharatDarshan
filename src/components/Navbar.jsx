@@ -36,9 +36,7 @@ const Navbar = () => {
   return (
     <div
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        navDark
-          ? "bg-black/90 backdrop-blur-sm shadow-lg"
-          : "bg-transparent"
+        navDark ? "bg-black/90 backdrop-blur-sm shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="flex items-center justify-between px-6 lg:px-12 py-4">
@@ -61,20 +59,7 @@ const Navbar = () => {
           className={`hidden lg:flex items-center space-x-8 text-base font-light transition-colors duration-300 ${
             navDark ? "text-white" : "text-white"
           }`}
-        >
-          <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-            <span>Destinations</span>
-            <ChevronRight className="w-4 h-4 rotate-90" />
-          </div>
-          <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-            <span>Experiences</span>
-            <ChevronRight className="w-4 h-4 rotate-90" />
-          </div>
-          <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-            <span>Plan your trip</span>
-            <ChevronRight className="w-4 h-4 rotate-90" />
-          </div>
-        </div>
+        ></div>
 
         {/* Right side icons */}
         <div
@@ -82,10 +67,6 @@ const Navbar = () => {
             navDark ? "text-white" : "text-white"
           }`}
         >
-          <Search className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-          <User className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-          <Heart className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-
           <SignedOut>
             <SignInButton />
           </SignedOut>
