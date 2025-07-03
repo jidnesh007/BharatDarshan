@@ -75,10 +75,9 @@ export default function HeroSection() {
 
   return (
     <>
-      <div className="container">
-        <div className="relative h-screen w-full overflow-hidden">
-          <style>
-            {`
+      <div className="relative h-screen w-full overflow-hidden">
+        <style>
+          {`
                     .video-slide {
                         position: absolute;
                         top: 0; left: 0; width: 100%; height: 100%;
@@ -95,123 +94,122 @@ export default function HeroSection() {
                         to { transform: translateX(0%); }
                     }
                 `}
-          </style>
+        </style>
 
-          {/* Current video */}
+        {/* Current video */}
+        <video
+          key={videos[current].src}
+          src={videos[current].src}
+          autoPlay
+          muted={isMuted}
+          loop
+          className="video-slide"
+          style={{
+            zIndex: transitioning ? 0 : 1,
+            transform: transitioning
+              ? direction === "right"
+                ? "translateX(-100%)"
+                : "translateX(100%)"
+              : "translateX(0%)",
+            opacity: transitioning ? 0.7 : 1,
+          }}
+        />
+
+        {/* Next video (for transition) */}
+        {transitioning && next !== null && (
           <video
-            key={videos[current].src}
-            src={videos[current].src}
+            key={videos[next].src}
+            src={videos[next].src}
             autoPlay
             muted={isMuted}
             loop
             className="video-slide"
             style={{
-              zIndex: transitioning ? 0 : 1,
-              transform: transitioning
-                ? direction === "right"
-                  ? "translateX(-100%)"
-                  : "translateX(100%)"
-                : "translateX(0%)",
-              opacity: transitioning ? 0.7 : 1,
+              zIndex: 1,
+              transform:
+                direction === "right" ? "translateX(0%)" : "translateX(0%)",
+              opacity: 1,
+              left: 0,
+              ...(direction === "right"
+                ? { transform: "translateX(100%)" }
+                : { transform: "translateX(-100%)" }),
+              animation: `slide-in-${direction} ${transitionDuration}ms forwards`,
             }}
           />
+        )}
 
-          {/* Next video (for transition) */}
-          {transitioning && next !== null && (
-            <video
-              key={videos[next].src}
-              src={videos[next].src}
-              autoPlay
-              muted={isMuted}
-              loop
-              className="video-slide"
-              style={{
-                zIndex: 1,
-                transform:
-                  direction === "right" ? "translateX(0%)" : "translateX(0%)",
-                opacity: 1,
-                left: 0,
-                ...(direction === "right"
-                  ? { transform: "translateX(100%)" }
-                  : { transform: "translateX(-100%)" }),
-                animation: `slide-in-${direction} ${transitionDuration}ms forwards`,
-              }}
-            />
-          )}
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/20 z-0"></div>
 
-          {/* Dark overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/20 z-0"></div>
+        {/* Navbar */}
+        <Navbar />
 
-          {/* Navbar */}
-          <Navbar />
-
-          {/* Bottom Controls */}
-          <div className="absolute bottom-8 left-0 right-0 z-10">
-            {/* Video category tabs */}
-            <div className="flex justify-center items-center space-x-0 text-white text-sm lg:text-base mb-6">
-              {videos.map((video, index) => (
-                <React.Fragment key={video.name}>
-                  <span
-                    className={`cursor-pointer px-4 py-2 transition-all duration-300 ${
-                      current === index
-                        ? "text-yellow-400 font-medium"
-                        : "text-white/80 hover:text-white font-light"
-                    }`}
-                    onClick={() => selectVideo(index)}
-                  >
-                    {video.name}
-                  </span>
-                  {index < videos.length - 1 && (
-                    <div className="w-px h-4 bg-white/40"></div>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
+        {/* Bottom Controls */}
+        <div className="absolute bottom-8 left-0 right-0 z-10">
+          {/* Video category tabs */}
+          <div className="flex justify-center items-center space-x-0 text-white text-sm lg:text-base mb-6">
+            {videos.map((video, index) => (
+              <React.Fragment key={video.name}>
+                <span
+                  className={`cursor-pointer px-4 py-2 transition-all duration-300 ${
+                    current === index
+                      ? "text-yellow-400 font-medium"
+                      : "text-white/80 hover:text-white font-light"
+                  }`}
+                  onClick={() => selectVideo(index)}
+                >
+                  {video.name}
+                </span>
+                {index < videos.length - 1 && (
+                  <div className="w-px h-4 bg-white/40"></div>
+                )}
+              </React.Fragment>
+            ))}
           </div>
-
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevVideo}
-            className="absolute left-6 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-white text-4xl z-10 transition-all duration-300 hover:scale-110"
-            disabled={transitioning}
-          >
-            <ChevronLeft className="w-8 h-8" />
-          </button>
-          <button
-            onClick={nextVideo}
-            className="absolute right-6 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-white text-4xl z-10 transition-all duration-300 hover:scale-110"
-            disabled={transitioning}
-          >
-            <ChevronRight className="w-8 h-8" />
-          </button>
-
-          {/* Mute/Unmute button */}
-          <button
-            onClick={() => setIsMuted(!isMuted)}
-            className="absolute bottom-8 right-8 text-white/80 hover:text-white z-10 transition-all duration-300"
-          >
-            {isMuted ? (
-              <VolumeX className="w-6 h-6" />
-            ) : (
-              <Volume2 className="w-6 h-6" />
-            )}
-          </button>
-          <style jsx>{`
-            .writing-mode-vertical {
-              writing-mode: vertical-rl;
-              text-orientation: mixed;
-            }
-          `}</style>
         </div>
 
-        <div className="w-full h-full">
-          <HeritageCarousel />
-          <ExiquisiteCrafts />
-          <Multi />
-          <Time />
-          <Scam />
-          <Carbon />
-        </div>
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevVideo}
+          className="absolute left-6 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-white text-4xl z-10 transition-all duration-300 hover:scale-110"
+          disabled={transitioning}
+        >
+          <ChevronLeft className="w-8 h-8" />
+        </button>
+        <button
+          onClick={nextVideo}
+          className="absolute right-6 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-white text-4xl z-10 transition-all duration-300 hover:scale-110"
+          disabled={transitioning}
+        >
+          <ChevronRight className="w-8 h-8" />
+        </button>
+
+        {/* Mute/Unmute button */}
+        <button
+          onClick={() => setIsMuted(!isMuted)}
+          className="absolute bottom-8 right-8 text-white/80 hover:text-white z-10 transition-all duration-300"
+        >
+          {isMuted ? (
+            <VolumeX className="w-6 h-6" />
+          ) : (
+            <Volume2 className="w-6 h-6" />
+          )}
+        </button>
+        <style jsx>{`
+          .writing-mode-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+          }
+        `}</style>
+      </div>
+
+      <div className="w-full h-full">
+        <HeritageCarousel />
+        <ExiquisiteCrafts />
+        <Multi />
+        <Time />
+        <Scam />
+        <Carbon />
       </div>
     </>
   );
