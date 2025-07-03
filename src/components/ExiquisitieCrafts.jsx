@@ -19,42 +19,42 @@ const ExquisiteCrafts = () => {
       state: "Gujarat",
       craft: "Patola Prints",
       image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
+        "/images/oo.jpg",
     },
     {
       id: 2,
       state: "Jammu and Kashmir",
       craft: "Walnut Wood",
       image:
-        "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400&h=300&fit=crop",
+        "/images/walnut.jpeg",
     },
     {
       id: 3,
       state: "Karnataka",
       craft: "Channapatna",
       image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
+        "/images/chan.jpeg",
     },
     {
       id: 4,
       state: "Kerala",
       craft: "Aranmula",
       image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
+        "/images/ker.jpg",
     },
     {
       id: 5,
       state: "Rajasthan",
       craft: "Blue Pottery",
       image:
-        "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400&h=300&fit=crop",
+        "images/raj.png",
     },
     {
       id: 6,
       state: "West Bengal",
       craft: "Kantha Work",
       image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
+        "images/kant.jpg",
     },
   ];
 
@@ -79,7 +79,7 @@ const ExquisiteCrafts = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-100 font-bold">
+    <div className="relative min-h-screen bg-white font-bold">
       {/* Navigation Bar */}
 
       {/* Red Background Section */}

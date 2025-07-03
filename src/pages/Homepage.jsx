@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import HeritageCarousel from "../components/HeritageCarousel";
 import ExiquisiteCrafts from "../components/ExiquisitieCrafts";
+import Carbon from "../components/Carbon";
 import {
   SignedIn,
   SignedOut,
@@ -20,6 +21,9 @@ import {
 } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Multi from "../components/Multi";
+import Time from "../components/Time";
+import Scam from "../components/Scam"
 
 const videos = [
   { name: "India 360", src: "/videos/India-360-v2.mp4" },
@@ -202,6 +206,10 @@ export default function HeroSection() {
       <div className="w-screen h-full">
         <HeritageCarousel />
         <ExiquisiteCrafts />
+        <Multi />
+        <Time />
+        <Scam/>
+        <Carbon />
       </div>
     </>
   );
