@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import MultiLanguage from "../components/MultilingualAudioApp";
-import TimeTravel from "../components/TimeTravel"; // Import the TimeTravel component
+import TimeTravel from "../components/TImeTravel"; // Import the TimeTravel component
 
 const Dashboard = () => {
   const [activeFeature, setActiveFeature] = useState("overview");
