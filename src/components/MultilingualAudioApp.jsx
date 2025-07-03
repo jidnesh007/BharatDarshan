@@ -11,6 +11,21 @@ import {
   Trash2,
 } from "lucide-react";
 
+// Add TabButton component
+const TabButton = ({ id, label, icon: Icon, activeTab, setActiveTab }) => (
+  <button
+    onClick={() => setActiveTab(id)}
+    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+      activeTab === id
+        ? "bg-blue-600 text-white"
+        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+    }`}
+  >
+    <Icon size={16} />
+    {label}
+  </button>
+);
+
 const MultilingualAudioApp = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -27,84 +42,101 @@ const MultilingualAudioApp = () => {
   const chunksRef = useRef([]);
 
   const languages = [
-    { code: "en-US", name: "English (US)", voice: "en-US" },
-    { code: "es-ES", name: "Spanish (Spain)", voice: "es-ES" },
-    { code: "fr-FR", name: "French (France)", voice: "fr-FR" },
-    { code: "de-DE", name: "German (Germany)", voice: "de-DE" },
-    { code: "it-IT", name: "Italian (Italy)", voice: "it-IT" },
-    { code: "pt-BR", name: "Portuguese (Brazil)", voice: "pt-BR" },
-    { code: "zh-CN", name: "Chinese (Mandarin)", voice: "zh-CN" },
-    { code: "ja-JP", name: "Japanese (Japan)", voice: "ja-JP" },
-    { code: "ko-KR", name: "Korean (South Korea)", voice: "ko-KR" },
-    { code: "ar-SA", name: "Arabic (Saudi Arabia)", voice: "ar-SA" },
-    { code: "hi-IN", name: "Hindi (India)", voice: "hi-IN" },
-    { code: "ru-RU", name: "Russian (Russia)", voice: "ru-RU" },
+    { code: "en-US", name: "English (US)" },
+    { code: "es-ES", name: "Spanish (Spain)" },
+    { code: "fr-FR", name: "French (France)" },
+    { code: "de-DE", name: "German (Germany)" },
+    { code: "it-IT", name: "Italian (Italy)" },
+    { code: "pt-BR", name: "Portuguese (Brazil)" },
+    { code: "zh-CN", name: "Chinese (Mandarin)" },
+    { code: "ja-JP", name: "Japanese (Japan)" },
+    { code: "ko-KR", name: "Korean (South Korea)" },
+    { code: "ar-SA", name: "Arabic (Saudi Arabia)" },
+    { code: "hi-IN", name: "Hindi (India)" },
+    { code: "ru-RU", name: "Russian (Russia)" },
   ];
 
-  // Text to Speech
-  const handleTextToSpeech = () => {
+  // TEXT TO SPEECH
+  const handleTextToSpeech = async () => {
     if (!inputText.trim()) return;
+    try {
+      setIsProcessing(true);
+      const translated = await translateWithGroq(inputText, targetLanguage);
 
-    setIsProcessing(true);
-    const utterance = new SpeechSynthesisUtterance(inputText);
+      const utterance = new SpeechSynthesisUtterance(translated);
+      utterance.lang = targetLanguage;
 
-    // Find matching voice
-    const voices = speechSynthesis.getVoices();
-    const selectedVoice = voices.find(
-      (voice) =>
-        voice.lang.startsWith(targetLanguage.split("-")[0]) ||
-        voice.lang === targetLanguage
-    );
+      const voices = speechSynthesis.getVoices();
+      const matchedVoice = voices.find((v) =>
+        v.lang.startsWith(targetLanguage.split("-")[0])
+      );
+      if (matchedVoice) utterance.voice = matchedVoice;
 
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
+      utterance.onstart = () => setIsPlaying(true);
+      utterance.onend = () => {
+        setIsPlaying(false);
+        setIsProcessing(false);
+      };
+      utterance.onerror = () => {
+        setIsPlaying(false);
+        setIsProcessing(false);
+      };
+
+      speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.error(err);
+      setIsProcessing(false);
     }
-
-    utterance.lang = targetLanguage;
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-
-    utterance.onstart = () => setIsPlaying(true);
-    utterance.onend = () => {
-      setIsPlaying(false);
-      setIsProcessing(false);
-    };
-    utterance.onerror = () => {
-      setIsPlaying(false);
-      setIsProcessing(false);
-    };
-
-    speechSynthesis.speak(utterance);
   };
 
-  // Speech to Text
+  // TRANSLATION
+  const translateWithGroq = async (text, targetLang) => {
+    const endpoint = "https://api.groq.com/openai/v1/chat/completions";
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+
+    const prompt = `Translate this text to ${targetLang}: ${text}`;
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [
+          { role: "system", content: "You are a translation assistant." },
+          { role: "user", content: prompt },
+        ],
+      }),
+    });
+    const data = await res.json();
+    return data.choices[0].message.content.trim();
+  };
+
+  // SPEECH TO TEXT
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
+      const recorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = recorder;
       chunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          chunksRef.current.push(event.data);
-        }
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
       };
 
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: "audio/wav" });
+      recorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         setAudioBlob(blob);
         stream.getTracks().forEach((track) => track.stop());
-        handleSpeechRecognition();
+        handleSpeechRecognition(blob);
       };
 
-      mediaRecorder.start();
+      recorder.start();
       setIsRecording(true);
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
-      alert(
-        "Error accessing microphone. Please ensure microphone permissions are granted."
-      );
+    } catch (err) {
+      console.error(err);
+      alert("Could not access microphone.");
     }
   };
 
@@ -115,60 +147,48 @@ const MultilingualAudioApp = () => {
     }
   };
 
-  const handleSpeechRecognition = () => {
-    if (
-      !("webkitSpeechRecognition" in window) &&
-      !("SpeechRecognition" in window)
-    ) {
-      alert("Speech recognition not supported in this browser");
-      return;
-    }
-
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-
-    recognition.lang = sourceLanguage;
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
+  const handleSpeechRecognition = async (blob) => {
     setIsProcessing(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", blob, "audio.webm");
+      formData.append("model", "whisper-large-v3");
+      formData.append("language", sourceLanguage.split("-")[0]);
 
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setTranscribedText(transcript);
-      setIsProcessing(false);
-    };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-      setIsProcessing(false);
-    };
-
-    recognition.onend = () => {
-      setIsProcessing(false);
-    };
-
-    // For demo purposes, we'll simulate speech recognition
-    setTimeout(() => {
-      setTranscribedText(
-        "This is a simulated transcription of your recorded audio."
+      const res = await fetch(
+        "https://api.groq.com/openai/v1/audio/transcriptions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
+          },
+          body: formData,
+        }
       );
+      if (!res.ok) throw new Error("Speech recognition failed");
+      const data = await res.json();
+      console.log("whisper transcript:", data.text);
+
+      const translated = await translateWithGroq(data.text, targetLanguage);
+      console.log("translated:", translated);
+      setTranscribedText(translated);
+    } catch (err) {
+      console.error(err);
+      alert("Transcription error");
+    } finally {
       setIsProcessing(false);
-    }, 2000);
+    }
   };
 
-  // Audio playback
   const playAudio = () => {
     if (audioBlob && audioRef.current) {
-      const audioUrl = URL.createObjectURL(audioBlob);
-      audioRef.current.src = audioUrl;
+      const url = URL.createObjectURL(audioBlob);
+      audioRef.current.src = url;
       audioRef.current.play();
       setIsPlaying(true);
-
       audioRef.current.onended = () => {
         setIsPlaying(false);
-        URL.revokeObjectURL(audioUrl);
+        URL.revokeObjectURL(url);
       };
     }
   };
@@ -180,22 +200,20 @@ const MultilingualAudioApp = () => {
     }
   };
 
-  // File upload
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
     if (file && file.type.startsWith("audio/")) {
       setAudioBlob(file);
       setTranscribedText("");
     }
   };
 
-  // Download audio
   const downloadAudio = () => {
     if (audioBlob) {
       const url = URL.createObjectURL(audioBlob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `audio-${Date.now()}.wav`;
+      a.download = `audio-${Date.now()}.webm`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -203,46 +221,23 @@ const MultilingualAudioApp = () => {
     }
   };
 
-  // Clear audio
   const clearAudio = () => {
     setAudioBlob(null);
     setTranscribedText("");
-    if (audioRef.current) {
-      audioRef.current.src = "";
-    }
+    if (audioRef.current) audioRef.current.src = "";
   };
 
-  // Load voices when component mounts
   useEffect(() => {
-    const loadVoices = () => {
-      speechSynthesis.getVoices();
-    };
-
+    const loadVoices = () => speechSynthesis.getVoices();
     loadVoices();
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = loadVoices;
-    }
+    speechSynthesis.onvoiceschanged = loadVoices;
   }, []);
-
-  const TabButton = ({ id, label, icon: Icon }) => (
-    <button
-      onClick={() => setActiveTab(id)}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-        activeTab === id
-          ? "bg-blue-500 text-white shadow-lg"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-      }`}
-    >
-      <Icon size={18} />
-      {label}
-    </button>
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Header */}
+          {/* HEADER */}
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6">
             <div className="flex items-center gap-3">
               <Languages size={32} />
@@ -257,367 +252,187 @@ const MultilingualAudioApp = () => {
             </div>
           </div>
 
-          {/* Tab Navigation */}
-          <div className="p-6 border-b">
-            <div className="flex flex-wrap gap-2">
-              <TabButton
-                id="text-to-speech"
-                label="Text to Speech"
-                icon={Volume2}
-              />
-              <TabButton
-                id="speech-to-text"
-                label="Speech to Text"
-                icon={Mic}
-              />
-              <TabButton
-                id="audio-to-audio"
-                label="Audio Translation"
-                icon={Languages}
-              />
+          {/* TABS */}
+          <div className="p-6 border-b flex gap-2 flex-wrap">
+            <TabButton
+              id="text-to-speech"
+              label="Text to Speech"
+              icon={Volume2}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+            <TabButton
+              id="speech-to-text"
+              label="Speech to Text"
+              icon={Mic}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+            <TabButton
+              id="audio-to-audio"
+              label="Audio Translation"
+              icon={Languages}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          </div>
+
+          {/* LANGUAGE SELECT */}
+          <div className="p-6 border-b bg-gray-50 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Source Language
+              </label>
+              <select
+                value={sourceLanguage}
+                onChange={(e) => setSourceLanguage(e.target.value)}
+                className="w-full p-3 border rounded"
+              >
+                {languages.map((l) => (
+                  <option key={l.code} value={l.code}>
+                    {l.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Target Language
+              </label>
+              <select
+                value={targetLanguage}
+                onChange={(e) => setTargetLanguage(e.target.value)}
+                className="w-full p-3 border rounded"
+              >
+                {languages.map((l) => (
+                  <option key={l.code} value={l.code}>
+                    {l.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Language Selection */}
-          <div className="p-6 border-b bg-gray-50">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Source Language
-                </label>
-                <select
-                  value={sourceLanguage}
-                  onChange={(e) => setSourceLanguage(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {languages.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Target Language
-                </label>
-                <select
-                  value={targetLanguage}
-                  onChange={(e) => setTargetLanguage(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {languages.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Content Area */}
+          {/* MAIN CONTENT */}
           <div className="p-6">
-            {/* Text to Speech Tab */}
+            {/* TEXT TO SPEECH */}
             {activeTab === "text-to-speech" && (
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Enter text to convert to speech
-                  </label>
-                  <textarea
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    placeholder="Type your text here..."
-                    className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  />
-                </div>
-                <div className="flex gap-3">
+                <textarea
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder="Type your text here..."
+                  className="w-full p-3 border rounded resize-none"
+                />
+                <button
+                  onClick={handleTextToSpeech}
+                  disabled={isProcessing}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  {isProcessing ? "Processing..." : "Speak"}
+                </button>
+                {isPlaying && (
                   <button
-                    onClick={handleTextToSpeech}
-                    disabled={!inputText.trim() || isProcessing}
-                    className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    onClick={() => speechSynthesis.cancel()}
+                    className="ml-2 px-4 py-2 bg-red-600 text-white rounded"
                   >
-                    {isProcessing ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Volume2 size={18} />
-                        Speak Text
-                      </>
-                    )}
+                    Stop
                   </button>
-                  {isPlaying && (
-                    <button
-                      onClick={() => speechSynthesis.cancel()}
-                      className="flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                    >
-                      <Square size={18} />
-                      Stop
-                    </button>
-                  )}
-                </div>
+                )}
               </div>
             )}
 
-            {/* Speech to Text Tab */}
+            {/* SPEECH TO TEXT */}
             {activeTab === "speech-to-text" && (
               <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  {/* Recording Controls */}
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Record Audio
-                    </label>
-                    <div className="flex gap-3">
-                      {!isRecording ? (
-                        <button
-                          onClick={startRecording}
-                          className="flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                        >
-                          <Mic size={18} />
-                          Start Recording
-                        </button>
-                      ) : (
-                        <button
-                          onClick={stopRecording}
-                          className="flex items-center gap-2 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors animate-pulse"
-                        >
-                          <Square size={18} />
-                          Stop Recording
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* File Upload */}
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Or Upload Audio File
-                    </label>
-                    <label className="flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors cursor-pointer">
-                      <Upload size={18} />
-                      Choose File
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-
-                {/* Audio Controls */}
+                {!isRecording ? (
+                  <button
+                    onClick={startRecording}
+                    className="px-4 py-2 bg-red-600 text-white rounded"
+                  >
+                    Start Recording
+                  </button>
+                ) : (
+                  <button
+                    onClick={stopRecording}
+                    className="px-4 py-2 bg-gray-600 text-white rounded animate-pulse"
+                  >
+                    Stop Recording
+                  </button>
+                )}
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={handleFileUpload}
+                  className="block"
+                />
                 {audioBlob && (
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-sm font-medium text-gray-700">
-                        Recorded Audio:
-                      </span>
-                      <div className="flex gap-2">
-                        {!isPlaying ? (
-                          <button
-                            onClick={playAudio}
-                            className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 transition-colors"
-                          >
-                            <Play size={14} />
-                            Play
-                          </button>
-                        ) : (
-                          <button
-                            onClick={pauseAudio}
-                            className="flex items-center gap-1 px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600 transition-colors"
-                          >
-                            <Pause size={14} />
-                            Pause
-                          </button>
-                        )}
-                        <button
-                          onClick={downloadAudio}
-                          className="flex items-center gap-1 px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-colors"
-                        >
-                          <Download size={14} />
-                          Download
-                        </button>
-                        <button
-                          onClick={clearAudio}
-                          className="flex items-center gap-1 px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-colors"
-                        >
-                          <Trash2 size={14} />
-                          Clear
-                        </button>
-                      </div>
-                    </div>
-                    <audio ref={audioRef} className="hidden" />
+                  <div className="space-x-2 mt-2">
+                    <button
+                      onClick={playAudio}
+                      className="px-3 py-1 bg-blue-500 text-white rounded"
+                    >
+                      Play
+                    </button>
+                    <button
+                      onClick={pauseAudio}
+                      className="px-3 py-1 bg-yellow-500 text-white rounded"
+                    >
+                      Pause
+                    </button>
+                    <button
+                      onClick={downloadAudio}
+                      className="px-3 py-1 bg-green-500 text-white rounded"
+                    >
+                      Download
+                    </button>
+                    <button
+                      onClick={clearAudio}
+                      className="px-3 py-1 bg-red-500 text-white rounded"
+                    >
+                      Clear
+                    </button>
                   </div>
                 )}
-
-                {/* Transcription Results */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Transcribed Text
-                  </label>
-                  <div className="p-4 border border-gray-300 rounded-lg min-h-24 bg-gray-50">
-                    {isProcessing ? (
-                      <div className="flex items-center gap-2 text-gray-500">
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500 border-t-transparent"></div>
-                        Processing audio...
-                      </div>
-                    ) : transcribedText ? (
-                      <p className="text-gray-800">{transcribedText}</p>
-                    ) : (
-                      <p className="text-gray-500">
-                        Transcribed text will appear here...
-                      </p>
-                    )}
-                  </div>
+                <audio ref={audioRef} hidden />
+                <div className="border p-3 bg-gray-50 rounded">
+                  {isProcessing
+                    ? "Processing..."
+                    : transcribedText || "Transcribed text will appear here."}
                 </div>
               </div>
             )}
 
-            {/* Audio to Audio Tab */}
+            {/* AUDIO TO AUDIO */}
             {activeTab === "audio-to-audio" && (
-              <div className="space-y-4">
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Languages className="text-blue-600" size={20} />
-                    <h3 className="font-medium text-blue-800">
-                      Audio Translation Process
-                    </h3>
-                  </div>
-                  <p className="text-blue-700 text-sm">
-                    This feature combines speech-to-text and text-to-speech to
-                    translate audio from one language to another.
-                  </p>
-                </div>
-
-                {/* Step 1: Record or Upload */}
-                <div className="space-y-3">
-                  <h4 className="font-medium text-gray-800">
-                    Step 1: Provide Source Audio
-                  </h4>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex-1">
-                      {!isRecording ? (
-                        <button
-                          onClick={startRecording}
-                          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-                        >
-                          <Mic size={18} />
-                          Record Audio
-                        </button>
-                      ) : (
-                        <button
-                          onClick={stopRecording}
-                          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors animate-pulse"
-                        >
-                          <Square size={18} />
-                          Stop Recording
-                        </button>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <label className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors cursor-pointer">
-                        <Upload size={18} />
-                        Upload Audio File
-                        <input
-                          type="file"
-                          accept="audio/*"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Step 2: Process Audio */}
-                {audioBlob && (
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-gray-800">
-                      Step 2: Audio Processing
-                    </h4>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-700">
-                          Source Audio:
-                        </span>
-                        <div className="flex gap-2">
-                          {!isPlaying ? (
-                            <button
-                              onClick={playAudio}
-                              className="flex items-center gap-1 px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 transition-colors"
-                            >
-                              <Play size={14} />
-                              Play
-                            </button>
-                          ) : (
-                            <button
-                              onClick={pauseAudio}
-                              className="flex items-center gap-1 px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600 transition-colors"
-                            >
-                              <Pause size={14} />
-                              Pause
-                            </button>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Transcription */}
-                      <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Transcribed Text (
-                          {
-                            languages.find((l) => l.code === sourceLanguage)
-                              ?.name
-                          }
-                          ):
-                        </label>
-                        <div className="p-3 border border-gray-300 rounded bg-white text-sm">
-                          {isProcessing ? (
-                            <div className="flex items-center gap-2 text-gray-500">
-                              <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500 border-t-transparent"></div>
-                              Transcribing audio...
-                            </div>
-                          ) : transcribedText ? (
-                            transcribedText
-                          ) : (
-                            <span className="text-gray-500">
-                              Transcription will appear here...
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Translation & Speech Generation */}
-                      {transcribedText && (
-                        <div>
-                          <button
-                            onClick={() => {
-                              setInputText(transcribedText);
-                              handleTextToSpeech();
-                            }}
-                            disabled={isProcessing}
-                            className="flex items-center gap-2 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                          >
-                            <Languages size={18} />
-                            Generate Translated Audio
-                          </button>
-                          <p className="text-sm text-gray-600 mt-2">
-                            This will speak the transcribed text in{" "}
-                            {
-                              languages.find((l) => l.code === targetLanguage)
-                                ?.name
-                            }
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    <audio ref={audioRef} className="hidden" />
+              <div>
+                <p className="mb-4 text-gray-700">
+                  This combines speech-to-text and text-to-speech.
+                </p>
+                <button
+                  onClick={startRecording}
+                  disabled={isRecording}
+                  className="px-4 py-2 bg-red-600 text-white rounded"
+                >
+                  Record Audio
+                </button>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={handleFileUpload}
+                  className="block mt-2"
+                />
+                {transcribedText && (
+                  <div className="mt-4">
+                    <button
+                      onClick={() => {
+                        setInputText(transcribedText);
+                        handleTextToSpeech();
+                      }}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded"
+                    >
+                      Play Translation
+                    </button>
                   </div>
                 )}
               </div>

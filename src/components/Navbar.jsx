@@ -62,18 +62,7 @@ const Navbar = () => {
             navDark ? "text-white" : "text-white"
           }`}
         >
-          <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-            <span>Destinations</span>
-            <ChevronRight className="w-4 h-4 rotate-90" />
-          </div>
-          <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-            <span>Experiences</span>
-            <ChevronRight className="w-4 h-4 rotate-90" />
-          </div>
-          <div className="flex items-center space-x-1 cursor-pointer hover:text-gray-300 transition-colors">
-            <span>Plan your trip</span>
-            <ChevronRight className="w-4 h-4 rotate-90" />
-          </div>
+          
         </div>
 
         {/* Right side icons */}
@@ -82,9 +71,7 @@ const Navbar = () => {
             navDark ? "text-white" : "text-white"
           }`}
         >
-          <Search className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-          <User className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
-          <Heart className="w-5 h-5 cursor-pointer hover:text-gray-300 transition-colors" />
+      
 
           <SignedOut>
             <SignInButton />

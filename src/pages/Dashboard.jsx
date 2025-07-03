@@ -14,8 +14,8 @@ import {
   Award,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
-import MultiLanguage from "../components/MultilingualAudioApp"; 
-// Import the MultiLanguage component
+import MultiLanguage from "../components/MultilingualAudioApp";
+import TimeTravel from "../components/TimeTravel"; // Import the TimeTravel component
 
 const Dashboard = () => {
   const [activeFeature, setActiveFeature] = useState("overview");
@@ -191,7 +191,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40">
+      {/* <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-4">
             <button
@@ -220,8 +220,12 @@ const Dashboard = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full"></div>
           </div>
         </div>
+      </header> */}
+      <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-40">
+        <div className="flex items-center justify-between px-6 py-4 h-16 bg-neutral-600">
+          <Navbar />
+        </div>
       </header>
-
       <div className="flex">
         {/* Sidebar */}
         <aside
@@ -393,7 +397,9 @@ const Dashboard = () => {
               </div>
             </div>
           ) : activeFeature === "multilingual" ? (
-            <MultiLanguage /> // Render MultiLanguage component
+            <MultiLanguage />
+          ) : activeFeature === "time-travel" ? (
+            <TimeTravel /> // Render TimeTravel component
           ) : (
             <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
               <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
