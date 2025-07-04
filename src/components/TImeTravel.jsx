@@ -7,16 +7,19 @@ import {
   MapPin,
   Camera,
   Sparkles,
-  ArrowRight,
   History,
+  AlertCircle,
 } from "lucide-react";
 
 export default function TimeTravel() {
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [timePeriod, setTimePeriod] = useState(200);
+  const [timePeriod, setTimePeriod] = useState(50); // default 50 years, max 100
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState(null);
-  const [historicalInfo, setHistoricalInfo] = useState(null);
+  const [placeName, setPlaceName] = useState(null);
+  const [wikiSummary, setWikiSummary] = useState(null);
+  const [wikiThumbnail, setWikiThumbnail] = useState(null);
+  const [historicalImages, setHistoricalImages] = useState([]);
+  const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (event) => {
@@ -25,92 +28,193 @@ export default function TimeTravel() {
       const reader = new FileReader();
       reader.onload = (e) => {
         setUploadedImage(e.target.result);
-        setGeneratedImage(null);
-        setHistoricalInfo(null);
+        setPlaceName(null);
+        setWikiSummary(null);
+        setWikiThumbnail(null);
+        setHistoricalImages([]);
+        setError(null);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const analyzeImageWithGroq = async (imageBase64) => {
+    const apiKey = import.meta.env.VITE_XAI_API_KEY;
+    if (!apiKey) {
+      throw new Error("Groq API key is missing in .env file");
+    }
+
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "meta-llama/llama-4-scout-17b-16e-instruct",
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: "Analyze this image and identify the specific location, landmark, or place shown. Provide only the name of the place or landmark, nothing else. Be as specific as possible (e.g., 'Eiffel Tower', 'Taj Mahal', 'Times Square', 'Golden Gate Bridge').",
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: imageBase64,
+                  },
+                },
+              ],
+            },
+          ],
+          max_tokens: 50,
+          temperature: 0.1,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        `Groq API Error: ${errorData.error?.message || response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    return data.choices[0]?.message?.content?.trim() || "Unknown location";
+  };
+
   const generateHistoricalImage = async () => {
-    if (!uploadedImage) return;
+    if (!uploadedImage) {
+      setError("No image uploaded");
+      return;
+    }
 
     setIsGenerating(true);
+    setError(null);
 
-    // Simulate AI processing time
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    try {
+      // Step 1: Analyze image with Groq
+      console.log("Analyzing image with Groq...");
+      const identifiedPlace = await analyzeImageWithGroq(uploadedImage);
+      console.log("Identified Place:", identifiedPlace);
+      if (identifiedPlace === "Unknown location") {
+        throw new Error("Could not identify a valid place from the image");
+      }
+      setPlaceName(identifiedPlace);
 
-    // Generate mock historical information based on time period
-    const currentYear = new Date().getFullYear();
-    const targetYear = currentYear - timePeriod;
+      // Step 2: Get Wikipedia summary
+      const wikiResponse = await fetch(
+        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
+          identifiedPlace
+        )}`
+      );
 
-    const historicalData = {
-      targetYear,
-      timePeriod,
-      era: getHistoricalEra(targetYear),
-      changes: getHistoricalChanges(timePeriod),
-      architecture: getArchitecturalStyle(targetYear),
-      technology: getTechnologyLevel(targetYear),
-      population: getPopulationData(timePeriod),
-      environment: getEnvironmentalChanges(timePeriod),
-    };
+      if (!wikiResponse.ok) {
+        throw new Error(
+          `Wikipedia API failed: ${wikiResponse.status} ${wikiResponse.statusText}`
+        );
+      }
 
-    // Create a simulated historical version of the image
-    // In a real implementation, this would call an AI service
-    setGeneratedImage(uploadedImage); // Using same image for demo
-    setHistoricalInfo(historicalData);
-    setIsGenerating(false);
-  };
+      const wikiData = await wikiResponse.json();
+      setWikiSummary(wikiData.extract || "No summary available");
+      setWikiThumbnail(wikiData.thumbnail?.source || null);
 
-  const getHistoricalEra = (year) => {
-    if (year >= 2000) return "Modern Era";
-    if (year >= 1950) return "Mid-20th Century";
-    if (year >= 1900) return "Early 20th Century";
-    if (year >= 1850) return "Industrial Revolution";
-    if (year >= 1800) return "Victorian Era";
-    if (year >= 1750) return "Colonial Period";
-    return "Pre-Industrial Era";
-  };
+      // Step 3: Search for historical images on Wikimedia Commons
+      const targetYear = new Date().getFullYear() - timePeriod;
+      console.log(`Searching for historical images near year: ${targetYear}`);
 
-  const getHistoricalChanges = (years) => {
-    const changes = [];
-    if (years >= 50) changes.push("Significant urban development changes");
-    if (years >= 100) changes.push("Major architectural evolution");
-    if (years >= 150) changes.push("Transportation infrastructure differences");
-    if (years >= 200) changes.push("Pre-industrial landscape features");
-    if (years >= 300) changes.push("Colonial-era structures and layouts");
-    return changes;
-  };
+      // Search with specific year
+      const commonsResponse = await fetch(
+        `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+          identifiedPlace
+        )} ${targetYear}&srnamespace=6&srlimit=10&format=json&origin=*`
+      );
 
-  const getArchitecturalStyle = (year) => {
-    if (year >= 1950) return "Modernist and Contemporary";
-    if (year >= 1900) return "Art Deco and Early Modern";
-    if (year >= 1850) return "Victorian and Gothic Revival";
-    if (year >= 1800) return "Neoclassical and Federal";
-    return "Colonial and Georgian";
-  };
+      if (!commonsResponse.ok) {
+        throw new Error(
+          `Wikimedia Commons API failed: ${commonsResponse.status} ${commonsResponse.statusText}`
+        );
+      }
 
-  const getTechnologyLevel = (year) => {
-    if (year >= 1950)
-      return "Electric lighting, automobiles, modern infrastructure";
-    if (year >= 1900) return "Early electricity, horse-drawn vehicles";
-    if (year >= 1850) return "Gas lighting, steam power, railways";
-    if (year >= 1800) return "Oil lamps, water mills, horse transportation";
-    return "Candles, manual labor, walking paths";
-  };
+      const commonsData = await commonsResponse.json();
+      let images = commonsData.query.search
+        .filter((item) => item.title.startsWith("File:"))
+        .map((item) => ({
+          title: item.title,
+          pageid: item.pageid,
+        }));
 
-  const getPopulationData = (years) => {
-    const reduction = Math.floor(years / 25) * 15;
-    return `Estimated ${reduction}% less populated than today`;
-  };
+      // If no exact year match, try broader search with historical terms
+      if (images.length === 0) {
+        console.log("No exact year match, trying broader historical search...");
+        const historicalTerms = [
+          "historical",
+          "vintage",
+          "old",
+          "archive",
+          "past",
+        ];
 
-  const getEnvironmentalChanges = (years) => {
-    const changes = [];
-    if (years >= 100) changes.push("More natural vegetation");
-    if (years >= 150) changes.push("Cleaner air and water");
-    if (years >= 200) changes.push("Extensive forests and wildlife");
-    if (years >= 250) changes.push("Undeveloped natural landscapes");
-    return changes;
+        for (const term of historicalTerms) {
+          const broadResponse = await fetch(
+            `https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+              identifiedPlace
+            )} ${term}&srnamespace=6&srlimit=10&format=json&origin=*`
+          );
+
+          if (broadResponse.ok) {
+            const broadData = await broadResponse.json();
+            const newImages = broadData.query.search
+              .filter((item) => item.title.startsWith("File:"))
+              .map((item) => ({
+                title: item.title,
+                pageid: item.pageid,
+              }));
+
+            images = [...images, ...newImages];
+            if (images.length >= 5) break; // Stop when we have enough images
+          }
+        }
+      }
+
+      // Get image URLs
+      const imageUrls = [];
+      for (const image of images.slice(0, 6)) {
+        try {
+          const infoResp = await fetch(
+            `https://commons.wikimedia.org/w/api.php?action=query&pageids=${image.pageid}&prop=imageinfo&iiprop=url&format=json&origin=*`
+          );
+
+          if (infoResp.ok) {
+            const infoData = await infoResp.json();
+            const info = infoData.query.pages[image.pageid].imageinfo;
+            if (info && info[0]?.url) {
+              imageUrls.push(info[0].url);
+            }
+          }
+        } catch (err) {
+          console.warn(`Failed to get URL for image ${image.title}:`, err);
+        }
+      }
+
+      setHistoricalImages(imageUrls);
+
+      if (imageUrls.length === 0) {
+        setError(
+          "No historical images found for this location and time period. The place might not have documented historical imagery available."
+        );
+      }
+    } catch (err) {
+      console.error("Error in generateHistoricalImage:", err);
+      setError(err.message || "An error occurred while processing the request");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -129,7 +233,7 @@ export default function TimeTravel() {
           </div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Upload any image and journey back in time to see how the location
-            looked decades or centuries ago
+            looked decades ago using AI-powered place recognition
           </p>
         </div>
       </div>
@@ -169,7 +273,6 @@ export default function TimeTravel() {
                   </div>
                 )}
               </div>
-
               <input
                 ref={fileInputRef}
                 type="file"
@@ -179,13 +282,12 @@ export default function TimeTravel() {
               />
             </div>
 
-            {/* Time Period Selector */}
+            {/* Time Period */}
             <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <Calendar className="w-6 h-6 mr-3 text-blue-400" />
                 Select Time Period
               </h2>
-
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-3">
@@ -193,19 +295,18 @@ export default function TimeTravel() {
                   </label>
                   <input
                     type="range"
-                    min="50"
-                    max="500"
-                    step="25"
+                    min="10"
+                    max="100"
+                    step="10"
                     value={timePeriod}
                     onChange={(e) => setTimePeriod(parseInt(e.target.value))}
                     className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
                   />
                   <div className="flex justify-between text-sm text-gray-400 mt-2">
-                    <span>50 years</span>
-                    <span>500 years</span>
+                    <span>10 years</span>
+                    <span>100 years</span>
                   </div>
                 </div>
-
                 <div className="bg-white/5 rounded-xl p-4">
                   <p className="text-center">
                     <span className="text-purple-400 font-semibold">
@@ -228,12 +329,12 @@ export default function TimeTravel() {
               {isGenerating ? (
                 <div className="flex items-center justify-center">
                   <Sparkles className="w-5 h-5 mr-2 animate-spin" />
-                  Generating Time Travel Vision...
+                  Analyzing with AI & Searching History...
                 </div>
               ) : (
                 <div className="flex items-center justify-center">
                   <Zap className="w-5 h-5 mr-2" />
-                  Generate Historical Image
+                  Generate Historical Vision
                 </div>
               )}
             </button>
@@ -241,107 +342,90 @@ export default function TimeTravel() {
 
           {/* Results Section */}
           <div className="space-y-8">
-            {generatedImage && (
-              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold mb-6 flex items-center">
-                  <History className="w-6 h-6 mr-3 text-green-400" />
-                  Historical Vision
+            {error && (
+              <div className="bg-red-500/20 backdrop-blur-lg rounded-3xl p-8 border border-red-500/30">
+                <h2 className="text-2xl font-bold mb-6 text-red-400 flex items-center">
+                  <AlertCircle className="w-6 h-6 mr-3" />
+                  Error
                 </h2>
-
-                <div className="space-y-6">
-                  <div className="relative">
-                    <img
-                      src={generatedImage}
-                      alt="Historical version"
-                      className="w-full rounded-xl shadow-lg"
-                    />
-                    <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm rounded-lg px-3 py-1">
-                      <span className="text-sm font-semibold text-green-400">
-                        {historicalInfo?.targetYear}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-center">
-                    <ArrowRight className="w-6 h-6 text-purple-400" />
-                    <span className="mx-4 text-lg font-semibold">
-                      Transformed to {historicalInfo?.era}
-                    </span>
-                  </div>
-                </div>
+                <p>{error}</p>
               </div>
             )}
 
-            {historicalInfo && (
+            {placeName && (
               <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
                 <h2 className="text-2xl font-bold mb-6 flex items-center">
                   <MapPin className="w-6 h-6 mr-3 text-yellow-400" />
-                  Historical Context
+                  AI Identified Place
                 </h2>
+                <p className="text-lg font-semibold text-yellow-200">
+                  {placeName}
+                </p>
+              </div>
+            )}
 
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-white/5 rounded-xl p-4">
-                      <h3 className="font-semibold text-purple-400 mb-2">
-                        Era
-                      </h3>
-                      <p className="text-sm">{historicalInfo.era}</p>
-                    </div>
+            {wikiSummary && (
+              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
+                <h2 className="text-2xl font-bold mb-6 flex items-center">
+                  <History className="w-6 h-6 mr-3 text-green-400" />
+                  Wikipedia Summary
+                </h2>
+                <p className="text-gray-200 leading-relaxed">{wikiSummary}</p>
+              </div>
+            )}
 
-                    <div className="bg-white/5 rounded-xl p-4">
-                      <h3 className="font-semibold text-blue-400 mb-2">
-                        Architecture
-                      </h3>
-                      <p className="text-sm">{historicalInfo.architecture}</p>
-                    </div>
+            {wikiThumbnail && (
+              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
+                <h2 className="text-2xl font-bold mb-6 flex items-center">
+                  <Camera className="w-6 h-6 mr-3 text-blue-400" />
+                  Current Reference Image
+                </h2>
+                <img
+                  src={wikiThumbnail}
+                  alt="Wikipedia Reference"
+                  className="w-full rounded-xl shadow-lg"
+                />
+              </div>
+            )}
+
+            {(placeName || historicalImages.length > 0) && (
+              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
+                <h2 className="text-2xl font-bold mb-6 flex items-center">
+                  <History className="w-6 h-6 mr-3 text-green-400" />
+                  Historical Images ({new Date().getFullYear() - timePeriod}s
+                  Era)
+                </h2>
+                {historicalImages.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {historicalImages.map((url, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={url}
+                          alt={`Historical image ${index + 1}`}
+                          className="w-full rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                          }}
+                        />
+                      </div>
+                    ))}
                   </div>
-
-                  <div className="bg-white/5 rounded-xl p-4">
-                    <h3 className="font-semibold text-green-400 mb-2">
-                      Technology Level
-                    </h3>
-                    <p className="text-sm">{historicalInfo.technology}</p>
+                ) : placeName ? (
+                  <div className="text-center py-8">
+                    <Clock className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                    <p className="text-gray-400">
+                      Searching for historical images from the{" "}
+                      {new Date().getFullYear() - timePeriod}s...
+                    </p>
                   </div>
-
-                  <div className="bg-white/5 rounded-xl p-4">
-                    <h3 className="font-semibold text-yellow-400 mb-2">
-                      Population
-                    </h3>
-                    <p className="text-sm">{historicalInfo.population}</p>
+                ) : (
+                  <div className="text-center py-8">
+                    <Camera className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                    <p className="text-gray-400">
+                      Upload an image to begin your time travel journey
+                    </p>
                   </div>
-
-                  {historicalInfo.changes.length > 0 && (
-                    <div className="bg-white/5 rounded-xl p-4">
-                      <h3 className="font-semibold text-red-400 mb-2">
-                        Major Changes
-                      </h3>
-                      <ul className="text-sm space-y-1">
-                        {historicalInfo.changes.map((change, index) => (
-                          <li key={index} className="flex items-start">
-                            <span className="text-red-400 mr-2">•</span>
-                            {change}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {historicalInfo.environment.length > 0 && (
-                    <div className="bg-white/5 rounded-xl p-4">
-                      <h3 className="font-semibold text-green-400 mb-2">
-                        Environmental Differences
-                      </h3>
-                      <ul className="text-sm space-y-1">
-                        {historicalInfo.environment.map((env, index) => (
-                          <li key={index} className="flex items-start">
-                            <span className="text-green-400 mr-2">•</span>
-                            {env}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             )}
           </div>
@@ -359,7 +443,6 @@ export default function TimeTravel() {
           border: 2px solid white;
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
-
         .slider::-moz-range-thumb {
           width: 24px;
           height: 24px;
