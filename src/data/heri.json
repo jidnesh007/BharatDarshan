@@ -1,0 +1,282 @@
+[
+  {
+    "name": "Taj Mahal",
+    "type": "monument",
+    "lat": 27.1751,
+    "lng": 78.0421,
+    "description": "A symbol of eternal love in Agra, built by Mughal emperor Shah Jahan."
+  },
+  {
+    "name": "Konark Sun Temple",
+    "type": "temple",
+    "lat": 19.8876,
+    "lng": 86.0945,
+    "description": "A 13th-century Sun temple and UNESCO World Heritage Site in Odisha."
+  },
+  {
+    "name": "Hampi",
+    "type": "heritage",
+    "lat": 15.335,
+    "lng": 76.4601,
+    "description": "Ruins of the Vijayanagara Empire, a UNESCO World Heritage Site in Karnataka."
+  },
+  {
+    "name": "Qutub Minar",
+    "type": "monument",
+    "lat": 28.5244,
+    "lng": 77.1855,
+    "description": "A towering minaret built in the early 13th century in Delhi."
+  },
+  {
+    "name": "Brihadeeswarar Temple",
+    "type": "temple",
+    "lat": 10.7828,
+    "lng": 79.1318,
+    "description": "A 1000-year-old Chola temple located in Thanjavur, Tamil Nadu."
+  },
+  {
+    "name": "Meenakshi Temple",
+    "type": "temple",
+    "lat": 9.9195,
+    "lng": 78.119,
+    "description": "A historic Hindu temple in Madurai, Tamil Nadu, dedicated to Goddess Meenakshi."
+  },
+  {
+    "name": "Golden Temple",
+    "type": "temple",
+    "lat": 31.62,
+    "lng": 74.8765,
+    "description": "The holiest Gurdwara of Sikhism, located in Amritsar, Punjab."
+  },
+  {
+    "name": "India Gate",
+    "type": "monument",
+    "lat": 28.6129,
+    "lng": 77.2295,
+    "description": "A war memorial built in honor of Indian soldiers who died in World War I."
+  },
+  {
+    "name": "Ajanta Caves",
+    "type": "heritage",
+    "lat": 20.5522,
+    "lng": 75.7033,
+    "description": "Ancient Buddhist caves with stunning paintings and sculptures in Maharashtra."
+  },
+  {
+    "name": "Ellora Caves",
+    "type": "heritage",
+    "lat": 20.0268,
+    "lng": 75.1794,
+    "description": "Rock-cut cave temples representing Buddhist, Hindu, and Jain religions."
+  },
+  {
+    "name": "Somnath Temple",
+    "type": "temple",
+    "lat": 20.888,
+    "lng": 70.4012,
+    "description": "One of the twelve Jyotirlinga shrines of Shiva, located in Gujarat."
+  },
+  {
+    "name": "Kashi Vishwanath Temple",
+    "type": "temple",
+    "lat": 25.3109,
+    "lng": 83.0095,
+    "description": "A sacred Hindu temple dedicated to Lord Shiva in Varanasi, Uttar Pradesh."
+  },
+  {
+    "name": "Victoria Memorial",
+    "type": "monument",
+    "lat": 22.5448,
+    "lng": 88.3426,
+    "description": "A white marble building in Kolkata, built in memory of Queen Victoria."
+  },
+  {
+    "name": "Charminar",
+    "type": "monument",
+    "lat": 17.3616,
+    "lng": 78.4747,
+    "description": "An iconic mosque and monument located in Hyderabad, Telangana."
+  },
+  {
+    "name": "Mahabalipuram",
+    "type": "heritage",
+    "lat": 12.617,
+    "lng": 80.1958,
+    "description": "Ancient port city famous for its rock-cut temples and sculptures in Tamil Nadu."
+  },
+  {
+    "name": "Ranakpur Jain Temple",
+    "type": "temple",
+    "lat": 25.1449,
+    "lng": 73.4746,
+    "description": "A marble temple dedicated to Tirthankara Adinatha in Rajasthan."
+  },
+  {
+    "name": "Lotus Temple",
+    "type": "monument",
+    "lat": 28.5535,
+    "lng": 77.2588,
+    "description": "A Baháʼí House of Worship in New Delhi known for its flower-like shape."
+  },
+  {
+    "name": "Kedarnath Temple",
+    "type": "temple",
+    "lat": 30.7346,
+    "lng": 79.0669,
+    "description": "One of the holiest Hindu temples dedicated to Lord Shiva in Uttarakhand."
+  },
+  {
+    "name": "Sun Temple Modhera",
+    "type": "temple",
+    "lat": 23.597,
+    "lng": 72.133,
+    "description": "A beautifully carved temple dedicated to the Sun God in Gujarat."
+  },
+  {
+    "name": "Sanchi Stupa",
+    "type": "heritage",
+    "lat": 23.4793,
+    "lng": 77.7391,
+    "description": "An ancient Buddhist complex and UNESCO site in Madhya Pradesh."
+  },
+  {
+    "name": "Gateway of India",
+    "type": "monument",
+    "lat": 18.9218,
+    "lng": 72.8347,
+    "description": "An iconic arch-monument built during the 20th century in Mumbai, Maharashtra."
+  },
+  {
+    "name": "Jagannath Temple",
+    "type": "temple",
+    "lat": 19.8068,
+    "lng": 85.8312,
+    "description": "One of the Char Dham pilgrimage sites, located in Puri, Odisha."
+  },
+  {
+    "name": "Khajuraho Group of Monuments",
+    "type": "heritage",
+    "lat": 24.8318,
+    "lng": 79.9199,
+    "description": "Famous for erotic sculptures and fine temple architecture in Madhya Pradesh."
+  },
+  {
+    "name": "Gol Gumbaz",
+    "type": "monument",
+    "lat": 16.8302,
+    "lng": 75.71,
+    "description": "A massive domed mausoleum of Mohammed Adil Shah in Karnataka."
+  },
+  {
+    "name": "Badrinath Temple",
+    "type": "temple",
+    "lat": 30.7433,
+    "lng": 79.493,
+    "description": "One of the Char Dham temples dedicated to Lord Vishnu, in Uttarakhand."
+  },
+  {
+    "name": "Nalanda University Ruins",
+    "type": "heritage",
+    "lat": 25.1366,
+    "lng": 85.4439,
+    "description": "An ancient seat of learning and Buddhist university in Bihar."
+  },
+  {
+    "name": "Rani ki Vav",
+    "type": "heritage",
+    "lat": 23.8561,
+    "lng": 72.101,
+    "description": "An intricately constructed stepwell on the Saraswati river in Gujarat."
+  },
+  {
+    "name": "Sundarbans National Park",
+    "type": "heritage",
+    "lat": 21.9497,
+    "lng": 89.1833,
+    "description": "A UNESCO World Heritage Site and the world’s largest mangrove forest."
+  },
+  {
+    "name": "Hawa Mahal",
+    "type": "monument",
+    "lat": 26.9239,
+    "lng": 75.8267,
+    "description": "A beautiful pink sandstone palace in Jaipur, Rajasthan, with 953 windows."
+  },
+  {
+    "name": "Virupaksha Temple",
+    "type": "temple",
+    "lat": 15.335,
+    "lng": 76.46,
+    "description": "A 7th-century temple in Hampi dedicated to Lord Shiva, still active today."
+  },
+  {
+    "name": "Shore Temple",
+    "type": "temple",
+    "lat": 12.6129,
+    "lng": 80.1966,
+    "description": "A granite temple built during the Pallava dynasty in Mahabalipuram."
+  },
+  {
+    "name": "Jaisalmer Fort",
+    "type": "monument",
+    "lat": 26.9124,
+    "lng": 70.9121,
+    "description": "A UNESCO fort built in yellow sandstone in the heart of the Thar Desert."
+  },
+  {
+    "name": "Basilica of Bom Jesus",
+    "type": "monument",
+    "lat": 15.5009,
+    "lng": 73.912,
+    "description": "A UNESCO-listed Baroque church in Old Goa holding St. Francis Xavier's remains."
+  },
+  {
+    "name": "Tawang Monastery",
+    "type": "temple",
+    "lat": 27.5861,
+    "lng": 91.8655,
+    "description": "The largest monastery in India, located in Arunachal Pradesh."
+  },
+  {
+    "name": "Sanchi Great Bowl",
+    "type": "heritage",
+    "lat": 23.4802,
+    "lng": 77.7386,
+    "description": "An ancient monastic relic bowl carved from a single stone in Madhya Pradesh."
+  },
+  {
+    "name": "Ajmer Sharif Dargah",
+    "type": "monument",
+    "lat": 26.4499,
+    "lng": 74.6399,
+    "description": "A revered Sufi shrine of Moinuddin Chishti in Ajmer, Rajasthan."
+  },
+  {
+    "name": "Thanjavur Palace",
+    "type": "monument",
+    "lat": 10.787,
+    "lng": 79.1378,
+    "description": "A historical palace complex of the Nayak and Maratha rulers in Tamil Nadu."
+  },
+  {
+    "name": "Rajgir Vulture's Peak",
+    "type": "heritage",
+    "lat": 25.0058,
+    "lng": 85.4182,
+    "description": "A spiritual site associated with Lord Buddha’s teachings in Bihar."
+  },
+  {
+    "name": "Ujjain Mahakaleshwar Temple",
+    "type": "temple",
+    "lat": 23.1765,
+    "lng": 75.7864,
+    "description": "One of the 12 Jyotirlinga shrines of Shiva, located in Madhya Pradesh."
+  },
+  {
+    "name": "Lingaraja Temple",
+    "type": "temple",
+    "lat": 20.2395,
+    "lng": 85.839,
+    "description": "A major Shaivite temple and architectural masterpiece in Bhubaneswar, Odisha."
+  }
+]
