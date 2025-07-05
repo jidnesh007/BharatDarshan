@@ -60,7 +60,7 @@ export default function TimeTravel() {
               content: [
                 {
                   type: "text",
-                  text: "Analyze this image and identify the specific location, landmark, or place shown. Provide only the name of the place or landmark, nothing else. Be as specific as possible (e.g., 'Eiffel Tower', 'Taj Mahal', 'Times Square', 'Golden Gate Bridge').",
+                  text: `Analyze this image and identify the specific location, landmark, or place shown. Provide only the exact name of the place or landmark as it appears on Wikipedia, and nothing else. Be as specific as possible (for example, 'Eiffel Tower', 'Taj Mahal', 'Times Square', 'Golden Gate Bridge').`,
                 },
                 {
                   type: "image_url",
