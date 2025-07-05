@@ -9,6 +9,34 @@ import {
   Sparkles,
   History,
   AlertCircle,
+  Crown,
+  Gem,
+  Eye,
+  TreePine,
+  Globe,
+  ChevronRight,
+  Star,
+  Sun,
+  Moon,
+  Compass,
+  BookOpen,
+  Award,
+  PlayCircle,
+  Pause,
+  Volume2,
+  VolumeX,
+  Heart,
+  Share,
+  Download,
+  Search,
+  Filter,
+  Bell,
+  Settings,
+  Info,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Activity,
 } from "lucide-react";
 
 export default function TimeTravel() {
@@ -60,7 +88,7 @@ export default function TimeTravel() {
               content: [
                 {
                   type: "text",
-                  text: `Analyze this image and identify the specific location, landmark, or place shown. Provide only the exact name of the place or landmark as it appears on Wikipedia, and nothing else. Be as specific as possible (for example, 'Eiffel Tower', 'Taj Mahal', 'Times Square', 'Golden Gate Bridge').`,
+                  text: "Analyze this image and identify the specific location, landmark, or place shown. Provide only the name of the place or landmark, nothing else. Be as specific as possible (e.g., 'Eiffel Tower', 'Taj Mahal', 'Times Square', 'Golden Gate Bridge') and don't provide fullstop at the end of name.",
                 },
                 {
                   type: "image_url",
@@ -218,23 +246,51 @@ export default function TimeTravel() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 via-pink-50 to-purple-100 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-orange-200/30 to-red-200/30 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-br from-blue-200/20 to-indigo-200/20 rounded-full blur-3xl"></div>
+
       {/* Header */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-red-500/20 to-pink-500/20"></div>
         <div className="relative container mx-auto px-6 py-16 text-center">
           <div className="flex items-center justify-center mb-6">
-            <div className="p-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mr-4">
-              <Clock className="w-8 h-8" />
+            <div className="p-4 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-2xl mr-4 shadow-2xl">
+              <Clock className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
-              Time Travel Vision
-            </h1>
+            <div className="text-left">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent">
+                ⏳ Kaal Yatra
+              </h1>
+              <p className="text-xl text-gray-600 mt-2">Time Travel Vision</p>
+            </div>
           </div>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Upload any image and journey back in time to see how the location
-            looked decades ago using AI-powered place recognition
-          </p>
+          <div className="max-w-4xl mx-auto">
+            <p className="text-xl text-gray-700 mb-4 leading-relaxed">
+              Embark on a divine journey through time and witness how sacred
+              heritage sites looked in their golden age
+            </p>
+            <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-white/50 shadow-xl">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <Gem className="w-6 h-6 text-orange-500" />
+                <span className="text-lg font-bold text-gray-800">
+                  Cultural Quote
+                </span>
+              </div>
+              <blockquote className="text-lg font-bold text-gray-800 italic mb-2">
+                "कालः कलयते सर्वं काले काल: कलिष्यते"
+              </blockquote>
+              <p className="text-gray-600">
+                "Time transforms everything, and time itself will be
+                transformed"
+              </p>
+              <p className="text-gray-500 text-sm mt-1">
+                - Ancient Sanskrit Wisdom
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -242,14 +298,23 @@ export default function TimeTravel() {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Upload Section */}
           <div className="space-y-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-              <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <Upload className="w-6 h-6 mr-3 text-purple-400" />
-                Upload Your Image
-              </h2>
+            <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500">
+              <div className="flex items-center mb-6">
+                <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl mr-4 shadow-lg">
+                  <Upload className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Upload Sacred Image
+                  </h2>
+                  <p className="text-gray-600 text-sm">
+                    Begin your divine darshan
+                  </p>
+                </div>
+              </div>
 
               <div
-                className="border-2 border-dashed border-purple-400 rounded-2xl p-8 text-center cursor-pointer hover:border-purple-300 transition-colors"
+                className="border-2 border-dashed border-orange-300 rounded-2xl p-8 text-center cursor-pointer hover:border-orange-400 hover:bg-orange-50/50 transition-all duration-300"
                 onClick={() => fileInputRef.current?.click()}
               >
                 {uploadedImage ? (
@@ -257,19 +322,36 @@ export default function TimeTravel() {
                     <img
                       src={uploadedImage}
                       alt="Uploaded"
-                      className="max-h-64 mx-auto rounded-xl shadow-lg"
+                      className="max-h-64 mx-auto rounded-xl shadow-2xl border-4 border-white"
                     />
-                    <p className="text-green-400 font-semibold">
-                      Image uploaded successfully!
-                    </p>
+                    <div className="flex items-center justify-center space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <p className="text-green-600 font-bold">
+                        Sacred image uploaded successfully!
+                      </p>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <Camera className="w-16 h-16 mx-auto text-purple-400" />
-                    <p className="text-lg">Click to upload an image</p>
-                    <p className="text-sm text-gray-400">
-                      Supports JPG, PNG, WebP
-                    </p>
+                    <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
+                      <Camera className="w-10 h-10 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold text-gray-800 mb-2">
+                        Upload Heritage Image
+                      </p>
+                      <p className="text-gray-600">
+                        Share a photo of any heritage site, monument, or
+                        cultural landmark
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-center space-x-4 text-sm text-gray-500">
+                      <span>JPG</span>
+                      <span>•</span>
+                      <span>PNG</span>
+                      <span>•</span>
+                      <span>WebP</span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -283,14 +365,23 @@ export default function TimeTravel() {
             </div>
 
             {/* Time Period */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-              <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <Calendar className="w-6 h-6 mr-3 text-blue-400" />
-                Select Time Period
-              </h2>
+            <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500">
+              <div className="flex items-center mb-6">
+                <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl mr-4 shadow-lg">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Time Portal Settings
+                  </h2>
+                  <p className="text-gray-600 text-sm">
+                    Choose your temporal journey
+                  </p>
+                </div>
+              </div>
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-3">
+                  <label className="block text-lg font-bold text-gray-800 mb-3">
                     Years Back in Time: {timePeriod}
                   </label>
                   <input
@@ -300,21 +391,27 @@ export default function TimeTravel() {
                     step="10"
                     value={timePeriod}
                     onChange={(e) => setTimePeriod(parseInt(e.target.value))}
-                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+                    className="w-full h-3 bg-gradient-to-r from-orange-200 to-red-200 rounded-lg appearance-none cursor-pointer slider"
                   />
-                  <div className="flex justify-between text-sm text-gray-400 mt-2">
-                    <span>10 years</span>
-                    <span>100 years</span>
+                  <div className="flex justify-between text-sm text-gray-500 mt-3">
+                    <span className="bg-white/50 px-3 py-1 rounded-full">
+                      10 years
+                    </span>
+                    <span className="bg-white/50 px-3 py-1 rounded-full">
+                      100 years
+                    </span>
                   </div>
                 </div>
-                <div className="bg-white/5 rounded-xl p-4">
-                  <p className="text-center">
-                    <span className="text-purple-400 font-semibold">
-                      Target Year:
-                    </span>{" "}
-                    <span className="text-2xl font-bold text-blue-400">
-                      {new Date().getFullYear() - timePeriod}
-                    </span>
+                <div className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-2xl p-6 text-white text-center shadow-lg">
+                  <div className="flex items-center justify-center space-x-2 mb-2">
+                    <History className="w-6 h-6" />
+                    <span className="text-lg font-bold">Target Era</span>
+                  </div>
+                  <div className="text-4xl font-bold mb-2">
+                    {new Date().getFullYear() - timePeriod}
+                  </div>
+                  <p className="text-white/90">
+                    Witness the golden age of {timePeriod} years ago
                   </p>
                 </div>
               </div>
@@ -324,17 +421,17 @@ export default function TimeTravel() {
             <button
               onClick={generateHistoricalImage}
               disabled={!uploadedImage || isGenerating}
-              className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-lg"
+              className="w-full bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 hover:from-orange-600 hover:via-red-600 hover:to-pink-600 disabled:from-gray-400 disabled:via-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-bold py-6 px-8 rounded-2xl text-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-2xl"
             >
               {isGenerating ? (
-                <div className="flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 mr-2 animate-spin" />
-                  Analyzing with AI & Searching History...
+                <div className="flex items-center justify-center space-x-3">
+                  <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>🔍 AI Analyzing Sacred Site...</span>
                 </div>
               ) : (
-                <div className="flex items-center justify-center">
-                  <Zap className="w-5 h-5 mr-2" />
-                  Generate Historical Vision
+                <div className="flex items-center justify-center space-x-3">
+                  <Sparkles className="w-6 h-6" />
+                  <span>🚀 Begin Time Travel Journey</span>
                 </div>
               )}
             </button>
@@ -343,86 +440,176 @@ export default function TimeTravel() {
           {/* Results Section */}
           <div className="space-y-8">
             {error && (
-              <div className="bg-red-500/20 backdrop-blur-lg rounded-3xl p-8 border border-red-500/30">
-                <h2 className="text-2xl font-bold mb-6 text-red-400 flex items-center">
-                  <AlertCircle className="w-6 h-6 mr-3" />
-                  Error
-                </h2>
-                <p>{error}</p>
+              <div className="bg-red-50 border border-red-200 rounded-3xl p-8 shadow-xl">
+                <div className="flex items-center mb-4">
+                  <div className="p-3 bg-red-500 rounded-xl mr-4">
+                    <AlertCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-red-700">
+                      Journey Interrupted
+                    </h2>
+                    <p className="text-red-600 text-sm">
+                      Unable to complete time travel
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-white/80 rounded-2xl p-6 border border-red-100">
+                  <p className="text-red-700 leading-relaxed">{error}</p>
+                </div>
               </div>
             )}
 
             {placeName && (
-              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold mb-6 flex items-center">
-                  <MapPin className="w-6 h-6 mr-3 text-yellow-400" />
-                  AI Identified Place
-                </h2>
-                <p className="text-lg font-semibold text-yellow-200">
-                  {placeName}
-                </p>
+              <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500">
+                <div className="flex items-center mb-6">
+                  <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl mr-4 shadow-lg">
+                    <Eye className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      AI Vision Recognition
+                    </h2>
+                    <p className="text-gray-600 text-sm">
+                      Sacred site identified by divine AI
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 border border-yellow-200">
+                  <div className="flex items-center space-x-3">
+                    <MapPin className="w-8 h-8 text-orange-500" />
+                    <div>
+                      <p className="text-2xl font-bold text-gray-800">
+                        {placeName}
+                      </p>
+                      <p className="text-gray-600">Heritage site identified</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
             {wikiSummary && (
-              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold mb-6 flex items-center">
-                  <History className="w-6 h-6 mr-3 text-green-400" />
-                  Wikipedia Summary
-                </h2>
-                <p className="text-gray-200 leading-relaxed">{wikiSummary}</p>
+              <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500">
+                <div className="flex items-center mb-6">
+                  <div className="p-3 bg-gradient-to-r from-green-500 to-teal-500 rounded-xl mr-4 shadow-lg">
+                    <BookOpen className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      Sacred Chronicles
+                    </h2>
+                    <p className="text-gray-600 text-sm">
+                      Historical wisdom from ancient texts
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl p-6 border border-green-200">
+                  <p className="text-gray-700 leading-relaxed text-lg">
+                    {wikiSummary}
+                  </p>
+                </div>
               </div>
             )}
 
             {wikiThumbnail && (
-              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold mb-6 flex items-center">
-                  <Camera className="w-6 h-6 mr-3 text-blue-400" />
-                  Current Reference Image
-                </h2>
-                <img
-                  src={wikiThumbnail}
-                  alt="Wikipedia Reference"
-                  className="w-full rounded-xl shadow-lg"
-                />
+              <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500">
+                <div className="flex items-center mb-6">
+                  <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl mr-4 shadow-lg">
+                    <Camera className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      Present Day Darshan
+                    </h2>
+                    <p className="text-gray-600 text-sm">
+                      Current reference image
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
+                  <img
+                    src={wikiThumbnail}
+                    alt="Current Reference"
+                    className="w-full rounded-xl shadow-2xl border-4 border-white"
+                  />
+                </div>
               </div>
             )}
 
             {(placeName || historicalImages.length > 0) && (
-              <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-                <h2 className="text-2xl font-bold mb-6 flex items-center">
-                  <History className="w-6 h-6 mr-3 text-green-400" />
-                  Historical Images ({new Date().getFullYear() - timePeriod}s
-                  Era)
-                </h2>
+              <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500">
+                <div className="flex items-center mb-6">
+                  <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl mr-4 shadow-lg">
+                    <History className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      Historical Time Portal
+                    </h2>
+                    <p className="text-gray-600 text-sm">
+                      Journey to the {new Date().getFullYear() - timePeriod}s
+                      era
+                    </p>
+                  </div>
+                </div>
+
                 {historicalImages.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {historicalImages.map((url, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={url}
-                          alt={`Historical image ${index + 1}`}
-                          className="w-full rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                          }}
-                        />
-                      </div>
-                    ))}
+                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {historicalImages.map((url, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={url}
+                            alt={`Historical image ${index + 1}`}
+                            className="w-full rounded-xl shadow-2xl border-4 border-white hover:shadow-3xl transition-all duration-300 transform group-hover:scale-105"
+                            onError={(e) => {
+                              e.target.style.display = "none";
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-3">
+                              <p className="text-sm font-medium">
+                                Historical Image {index + 1}
+                              </p>
+                              <p className="text-xs text-white/80">
+                                From the {new Date().getFullYear() - timePeriod}
+                                s era
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : placeName ? (
-                  <div className="text-center py-8">
-                    <Clock className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                    <p className="text-gray-400">
-                      Searching for historical images from the{" "}
-                      {new Date().getFullYear() - timePeriod}s...
+                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-12 text-center border border-purple-200">
+                    <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                      <Activity className="w-10 h-10 text-white animate-pulse" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">
+                      🔮 Time Portal Activating
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      Our AI time travelers are journeying to the{" "}
+                      <span className="font-bold text-purple-600">
+                        {new Date().getFullYear() - timePeriod}s
+                      </span>{" "}
+                      to gather sacred historical images...
                     </p>
                   </div>
                 ) : (
-                  <div className="text-center py-8">
-                    <Camera className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-                    <p className="text-gray-400">
-                      Upload an image to begin your time travel journey
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-12 text-center border border-orange-200">
+                    <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                      <Camera className="w-10 h-10 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">
+                      🏛 Begin Your Sacred Journey
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      Upload an image of any heritage site to witness its divine
+                      transformation through time
                     </p>
                   </div>
                 )}
@@ -432,25 +619,60 @@ export default function TimeTravel() {
         </div>
       </div>
 
+      {/* Cultural Footer */}
+      <div className="bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 text-white py-12 mt-16">
+        <div className="container mx-auto px-6 text-center">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <Crown className="w-8 h-8" />
+            <h3 className="text-2xl font-bold">Heritage AI Time Travel</h3>
+          </div>
+          <p className="text-white/90 max-w-2xl mx-auto leading-relaxed">
+            Experience the divine connection between past and present through
+            AI-powered heritage exploration. Every journey through time is a
+            step closer to understanding our eternal cultural legacy.
+          </p>
+          <div className="mt-6 flex justify-center space-x-6">
+            <button className="bg-white/20 backdrop-blur-lg px-6 py-3 rounded-xl hover:bg-white/30 transition-colors font-medium">
+              <Heart className="w-5 h-5 inline mr-2" />
+              Save Journey
+            </button>
+            <button className="bg-white/20 backdrop-blur-lg px-6 py-3 rounded-xl hover:bg-white/30 transition-colors font-medium">
+              <Share className="w-5 h-5 inline mr-2" />
+              Share Experience
+            </button>
+          </div>
+        </div>
+      </div>
+
       <style jsx>{`
         .slider::-webkit-slider-thumb {
           appearance: none;
-          width: 24px;
-          height: 24px;
-          background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+          width: 28px;
+          height: 28px;
+          background: linear-gradient(45deg, #f97316, #dc2626);
           border-radius: 50%;
           cursor: pointer;
-          border: 2px solid white;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          border: 3px solid white;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          transition: all 0.2s ease;
+        }
+        .slider::-webkit-slider-thumb:hover {
+          transform: scale(1.2);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         }
         .slider::-moz-range-thumb {
-          width: 24px;
-          height: 24px;
-          background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+          width: 28px;
+          height: 28px;
+          background: linear-gradient(45deg, #f97316, #dc2626);
           border-radius: 50%;
           cursor: pointer;
-          border: 2px solid white;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          border: 3px solid white;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          transition: all 0.2s ease;
+        }
+        .slider::-moz-range-thumb:hover {
+          transform: scale(1.2);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         }
       `}</style>
     </div>

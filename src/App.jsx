@@ -29,6 +29,8 @@ function App() {
       <Route path="/heridetails/TajMahal" element={<TajMahal />} />
       <Route path="/shop-local" element={<ShopLocal />} />
       <Route path="/dashboard" element={<Dashboard />} />
+
+
       <Route path="/multilingualAudioApp" element={<MultilingualAudioApp />} />
       
       {/* <ul>
