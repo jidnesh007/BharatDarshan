@@ -6,6 +6,7 @@ import ShopLocal from "./pages/ShopLocal"; // Import the ShopLocal component
 import { createClient } from "@supabase/supabase-js";
 import Dashboard from "./pages/Dashboard";
 import MultilingualAudioApp from "./components/MultilingualAudioApp"
+import Map from "./components/Map"; // Import the Map component
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -29,6 +30,8 @@ function App() {
       <Route path="/heridetails/TajMahal" element={<TajMahal />} />
       <Route path="/shop-local" element={<ShopLocal />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/map" element={<Map />} />
+      
 
 
       <Route path="/multilingualAudioApp" element={<MultilingualAudioApp />} />
