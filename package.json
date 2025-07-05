@@ -13,19 +13,16 @@
     "@clerk/clerk-react": "^5.32.3",
     "@supabase/supabase-js": "^2.50.2",
     "@tailwindcss/vite": "^4.1.11",
-<<<<<<< HEAD
-=======
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "dotenv": "^17.0.1",
->>>>>>> c5d0830e5eb64bc1f3f1a529d57d5f10b3f9d136
     "lucide-react": "^0.525.0",
+    "onnxruntime-web": "^1.22.0",
     "openai": "^5.8.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3",
-<<<<<<< HEAD
-=======
     "recharts": "^3.0.2",
->>>>>>> c5d0830e5eb64bc1f3f1a529d57d5f10b3f9d136
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

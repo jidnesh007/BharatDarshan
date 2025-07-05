@@ -19,7 +19,7 @@ const HeriInfo = () => {
   const [heritageInfo, setHeritageInfo] = useState(null);
   const [error, setError] = useState(null);
 
-  const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+  const GROQ_API_KEY = import.meta.env.VITE_XAI_API_KEY;
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
