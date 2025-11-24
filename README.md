@@ -3,7 +3,7 @@
 BharatDarshan is an AI-powered web application that transforms the way tourists and locals explore India’s culture, history, and heritage. It combines advanced machine learning, real-time intelligence, and immersive experiences to make travel safer, smarter, and more meaningful.
 
 🎥 **Project Demo:**
-👉 **[https://www.youtube.com/watch?v=YOUR_VIDEO_LINK]((https://bharat-darshan-pi.vercel.app/))**
+👉 **[https://bharat-darshan-pi.vercel.app/]((https://bharat-darshan-pi.vercel.app/))**
 
 ---
 
