@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+}
