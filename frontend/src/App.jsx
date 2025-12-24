@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import TajMahal from "./heridetails/TajMahal";
-import ShopLocal from "./pages/Shoplocal"; // Import the ShopLocal component
+import ShopLocal from "./pages/Shoplocal"; // Import the ShopLocal components
 import { createClient } from "@supabase/supabase-js";
 import Dashboard from "./pages/Dashboard";
 import MultilingualAudioApp from "./components/MultilingualAudioApp";
