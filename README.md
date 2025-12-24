@@ -19,7 +19,7 @@ BharatDarshan is an AI-powered web application that transforms the way tourists 
 * Explore rich historical data, documentaries, folk songs, dynastic timelines, and more.
 * Filter heritage sites by region, popularity, dynasty, or cultural category.
 
-### 🛍️ **E-Commerce Marketplace**
+### 🛍️ **E-Commerce Marketplaces**
 
 * Buy authentic Indian souvenirs, monuments, handicrafts, and regional clothing.
 * Supports local artisans and promotes sustainable tourism.
